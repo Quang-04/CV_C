@@ -1,0 +1,230 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<math.h>
+#include<malloc.h>
+int chuyen2(int d) {
+	int kq;
+	if (d == 48) {
+		kq = 0;
+	}
+	else if (d == 49) {
+		kq = 1;
+	}
+	else if (d == 50) {
+		kq = 2;
+	}
+	else if (d == 51) {
+		kq = 3;
+	}
+	else if (d == 52) {
+		kq = 4;
+	}
+	else if (d == 53) {
+		kq = 5;
+	}
+	else if (d == 54) {
+	    kq = 6;
+	}
+	else if (d == 55) {
+		kq = 7;
+	}
+	else if (d == 56) {
+		kq = 8;
+	}
+	else 
+		kq = 9;
+	return kq;
+}
+float chuyen(int a, int b, int  c) {
+	float kq ;
+	float so_thu_1;
+	float so_thu_2_test;
+	so_thu_1 = chuyen2(a);
+	so_thu_2_test = chuyen2(c);
+	float so_thu_2 = so_thu_2_test /10;
+	kq = so_thu_1 + so_thu_2;
+	return kq;
+}
+typedef struct {
+	char ten[50];
+	float diem_1;
+	float diem_2;
+	float diem_tb;
+}dl_hs;
+dl_hs luudata(char in[],int q,int *w) {
+	dl_hs hs;
+	do {
+		hs.ten[q] = in[*w];
+		q=q+1;
+		*w=*w+1;
+		if (in[*w] == ',') {
+			do {
+				hs.ten[q] = 0;
+				q=q+1;
+			} while (q != 51);
+		}
+	} while (q != 51);
+	*w=*w+1;
+	hs.diem_1 = chuyen(in[*w], in[1 + *w], in[2 + *w]);
+	*w = *w + 4;
+	hs.diem_2 = chuyen(in[*w], in[1 + *w], in[2 + *w]);
+	hs.diem_tb = (hs.diem_1 + hs.diem_2) / 2;
+	return hs;
+}
+void doi_vi_tri(dl_hs* a, dl_hs* b) {
+	dl_hs c;
+	c = *a;
+	*a = *b;
+	*b = c;
+}
+// Thay doi data file
+int chuyensothu1(int so_dau) {
+	int diem_1;
+	        if (so_dau == 0) {
+				diem_1 = 48;
+			}
+			else if(so_dau == 1) {
+				diem_1 = 49;
+			}
+			else if(so_dau == 2) {
+				diem_1 = 50;
+			}
+			else if(so_dau == 3) {
+				diem_1 = 51;
+			}
+			else if(so_dau == 4) {
+				diem_1 = 52;
+			}
+			else if(so_dau == 5) {
+				diem_1 = 53;
+			}
+			else if(so_dau == 6) {
+				diem_1 = 54;
+			}
+			else if(so_dau == 7) {
+				diem_1 = 55;
+			}
+			else if(so_dau == 8) {
+				diem_1 = 56;
+			}
+			else 
+				diem_1 = 57;
+	
+	return diem_1;
+}
+int chuyensothu2(double so_tt) {
+	int diem_2;
+	        if (so_tt == 0.0) {
+				diem_2 = 48;
+			}
+			else if(so_tt == 0.1) {
+				diem_2 = 49;
+			}
+			else if(so_tt == 0.2) {
+				diem_2 = 50;
+			}
+			else if(so_tt == 0.3) {
+				diem_2 = 51;
+			}
+			else if(so_tt == 0.4) {
+				diem_2 = 52;
+			}
+			else if(so_tt == 0.5) {
+				diem_2 = 53;
+			}
+			else if(so_tt == 0.6) {
+				diem_2 = 54;
+			}
+			else if(so_tt == 0.7) {
+				diem_2 = 55;
+			}
+			else if(so_tt == 0.8) {
+				diem_2 = 56;
+			}
+			else 
+				diem_2 = 57;
+
+		return diem_2;
+}
+int main() {
+	FILE* f = fopen("C:\\Users\\Quang\\Videos\\C\\file.c\\file.txt", "r");
+	if (f != NULL) {
+		printf("Mo FILE thanh cong");
+	}
+	else printf("Mo FILE that bai ");
+	char in[208] = { 0 };
+	int i = 0;
+	char c = fgetc(f);
+	do {
+		in[i] = c;
+		i++;
+		c = fgetc(f);
+	} while (c != -1);
+	printf("\nDu Lieu:");
+	printf("\n%s", in); 
+	int so_hoc_sinh = 5;
+	dl_hs* arr = malloc(sizeof(dl_hs) * 5);
+	int q = 0, w = 0;
+	for (int y = 0; in[w] != 0 || in[w + 1] != 0 || in[w + 2] != 0; w = w + 4) {
+		arr[y] = luudata(in, q, &w);
+		y++;
+	}
+	//Tim ng diem cao nhat.
+	int ng_diem_cao_nhat;
+	float diem_tb_cao_nhat = arr[0].diem_tb;
+	for (int i = 0; i < 5; i++) {
+		if (diem_tb_cao_nhat < arr[i].diem_tb) {
+			diem_tb_cao_nhat = arr[i].diem_tb;
+			ng_diem_cao_nhat = i;
+		}
+	}
+	//nen nho khi arr[n] chk đc khai bao n thi ta phai dung malloc ms khai bao dc, con khi da co data r thi lay ra ghi so vao cx đc bởi chỉ lấy ra thôi.
+	printf("\nNguoi co so diem trung binh cao nhat la:\n");
+	printf("%s,%.1f,%.1f", arr[ng_diem_cao_nhat].ten, arr[ng_diem_cao_nhat].diem_1, arr[ng_diem_cao_nhat].diem_2);
+	//In thu thu hoc sinh diem trung binh tu thap toi cao.
+	for (int u = 0; u < 4; u++) {
+		for (int h = u+1; h < 5; h++) {
+			if (arr[u].diem_tb > arr[h].diem_tb) {
+			doi_vi_tri(&arr[u],&arr[h]);
+			/*	dl_hs c = {0};
+				c = arr[u];
+				arr[h] = c;*/
+			}
+		}
+	}
+	printf("\n\nSau khi sap xep diem trung binh tang dan ra co danh sach:");
+	for (int j = 0; j < 5; j++) {
+		printf("\n%s,%.1f,%.1f voi diem trung binh la %.1f", arr[j].ten, arr[j].diem_1, arr[j].diem_2,arr[j].diem_tb);
+	}
+	printf("\n\nDu lieu file truoc khi thay doi la:");
+	printf("\n%s", in);
+	int y = 0;
+	for (int l = 0;l<5;l++) {
+		for (int a=0; arr[l].ten[a]!=0; a++) {
+			in[y] = arr[l].ten[a];
+			y++;
+		}
+		y++;
+			int so_dau_1 = arr[l].diem_1;
+			double so_tt_1 = arr[l].diem_1 - so_dau_1;
+			in[y] = chuyensothu1(so_dau_1);
+			y=y+2;
+			in[y] = chuyensothu2(so_tt_1);
+		y = y + 2;
+			int so_dau_2 = arr[l].diem_2;
+			double so_tt_2 = arr[l].diem_2 - so_dau_2;
+			in[y] = chuyensothu1(so_dau_2);
+			y = y + 2;
+			in[y] = chuyensothu2(so_tt_2);
+		y = y + 2;
+	}
+	fclose(f);
+	FILE* out = fopen("C:\\Users\\Quang\\Videos\\C\\file.c\\file.txt","w");
+	int size = sizeof(in) / sizeof(in[0]);
+	for (int v = 0; v < size; v++) {
+		fputc(in[v], out);
+	}
+	fclose(out);
+	printf("\n\nSau khi thay doi:");
+	printf("\n%s", in);
+}
